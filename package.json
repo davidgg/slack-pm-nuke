@@ -1,0 +1,21 @@
+{
+  "name": "slack-pm-nuke",
+  "version": "1.0.0",
+  "description": "Chrome extension to delete all your private messages from a Slack conversation",
+  "main": "index.js",
+  "scripts": {
+    "build-icons": "node scripts/svg-to-png.js",
+    "build": "zip -r build.zip dist/"
+  },
+  "keywords": [
+    "slack",
+    "privacy",
+    "chrome-extension",
+    "message-deletion"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "sharp": "^0.32.1"
+  }
+}

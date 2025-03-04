@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slack PM Nuke</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        width: 300px;
+        padding: 15px;
+        background-color: #f9f9f9;
+      }
+      h1 {
+        font-size: 18px;
+        color: #4a154b; /* Slack purple */
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .warning {
+        background-color: #fff0f0;
+        border-left: 3px solid #e01e5a;
+        padding: 10px;
+        font-size: 12px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      button {
+        background-color: #4a154b; /* Slack purple */
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #611f69;
+      }
+      button.danger {
+        background-color: #e01e5a; /* Slack red */
+      }
+      button.danger:hover {
+        background-color: #bc1a4b;
+      }
+      button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+      .status {
+        font-size: 12px;
+        margin-top: 10px;
+        color: #666;
+        min-height: 36px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Slack PM Nuke</h1>
+
+    <div class="container">
+      <div class="warning">
+        <strong>Warning:</strong> This will permanently delete all your messages
+        from the current conversation. This action cannot be undone.
+      </div>
+
+      <button id="delete-btn" class="danger">Delete My Messages</button>
+
+      <div class="status" id="status-message"></div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
