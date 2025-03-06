@@ -2,12 +2,33 @@
   const MESSAGE_SELECTOR = "[data-qa='message_container']";
   const MESSAGE_HOVER_SELECTOR = "[data-qa-hover]";
   const MENU_MORE_ACTIONS_SELECTOR = "[data-qa='more_message_actions']";
+  const POPUP_MORE_ACTIONS_SELECTOR = "[data-qa='menu']";
   const MENU_DELETE_BUTTON_SELECTOR =
     "[data-qa='delete_message-wrapper'] [data-qa='delete_message']";
   const MODAL_REMOVE_CONFIRMATION_SELECTOR = "[data-qa='dialog_go']";
   const HARD_LIMIT_PAGE_PROCESS = 10_000;
 
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const waitUntilElementIsVisible = (selector) =>
+    new Promise((resolve) => {
+      let tries = 0;
+
+      const interval = setInterval(() => {
+        const element = document.querySelector(selector);
+        if (element) {
+          clearInterval(interval);
+          resolve(element);
+          return;
+        }
+
+        tries++;
+        if (tries > 10) {
+          clearInterval(interval);
+          resolve(null);
+        }
+      }, 100);
+    });
 
   function getAllCurrentMessages() {
     return document.querySelectorAll(MESSAGE_SELECTOR);
@@ -34,15 +55,24 @@
 
   async function removeMessageIfPossible(message) {
     try {
-      triggerHover(message);
+      message.click();
+      message.scrollIntoView();
+      message.focus();
       await wait(100);
 
+      triggerHover(message);
+      await waitUntilElementIsVisible(MENU_MORE_ACTIONS_SELECTOR);
+
       showMoreActionsMenu(message);
-      await wait(1000);
+      await waitUntilElementIsVisible(POPUP_MORE_ACTIONS_SELECTOR);
 
+      if (!document.querySelector(MENU_DELETE_BUTTON_SELECTOR)) {
+        return;
+      }
       clickDeleteMenuButton();
-      await wait(1000);
+      await waitUntilElementIsVisible(MODAL_REMOVE_CONFIRMATION_SELECTOR);
 
+      await wait(500);
       clickRemoveConfirmationButton();
     } catch (error) {
       console.error("Error removing message:", error);

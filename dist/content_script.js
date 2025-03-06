@@ -11,10 +11,14 @@ if (typeof window.removeAllMessages !== "function") {
   );
 }
 
-// Listen for messages from the popup
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("Received message:", request);
+// Flag to track if listener is already registered
+let isListenerRegistered = false;
 
+// Remove any existing listeners (cleanup)
+chrome.runtime.onMessage.removeListener(messageHandler);
+
+// Define the message handler function separately
+function messageHandler(request, sender, sendResponse) {
   if (request.action === "startDeletion") {
     // Check if we're on a Slack page
     if (!window.location.href.includes("slack.com")) {
@@ -27,20 +31,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 
     // Start the deletion process
-    // We need to handle this asynchronously
     (async function () {
       try {
         // Call the removeAllMessages function from remover.js
         if (typeof window.removeAllMessages === "function") {
-          console.log("Starting message deletion process");
-
-          // Since removeAllMessages is async, we need to await it
           await window.removeAllMessages();
 
-          console.log("Message deletion process completed");
-          sendResponse({
-            success: true,
-          });
+          sendResponse({ success: true });
         } else {
           console.error("removeAllMessages function not found");
           sendResponse({
@@ -61,6 +58,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     return true; // Keep the message channel open for async response
   }
 
-  // Always return true for unhandled messages to avoid "The message port closed before a response was received" errors
+  // Always return true for unhandled messages
   return true;
-});
+}
+
+// Register the listener only if not already registered
+if (!isListenerRegistered) {
+  chrome.runtime.onMessage.addListener(messageHandler);
+  isListenerRegistered = true;
+}

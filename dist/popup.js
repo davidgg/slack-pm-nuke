@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    statusMessage.textContent = "Starting deletion process...";
+    statusMessage.textContent =
+      "Starting deletion process... You can close this popup, but keep the Slack tab open until the process completes.";
 
     // Send message to content script to start deletion
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -51,8 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
               }
 
               if (response && response.success) {
-                statusMessage.textContent =
-                  "Deletion process started. You can close this popup, but keep the Slack tab open until the process completes.";
+                statusMessage.textContent = "Completed";
               } else {
                 statusMessage.textContent =
                   response && response.error
