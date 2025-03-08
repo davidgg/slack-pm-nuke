@@ -1,14 +1,21 @@
 (function () {
   const MESSAGE_SELECTOR = "[data-qa='message_container']";
-  const MESSAGE_HOVER_SELECTOR = "[data-qa-hover]";
+  const MESSAGE_HOVER_SELECTOR = '[data-qa-hover]';
   const MENU_MORE_ACTIONS_SELECTOR = "[data-qa='more_message_actions']";
   const POPUP_MORE_ACTIONS_SELECTOR = "[data-qa='menu']";
-  const MENU_DELETE_BUTTON_SELECTOR =
-    "[data-qa='delete_message-wrapper'] [data-qa='delete_message']";
+  const MENU_DELETE_BUTTON_SELECTOR = "[data-qa='delete_message-wrapper'] [data-qa='delete_message']";
   const MODAL_REMOVE_CONFIRMATION_SELECTOR = "[data-qa='dialog_go']";
+  const MODAL_BACKDROP_SELECTOR = '.ReactModal__Overlay';
   const HARD_LIMIT_PAGE_PROCESS = 10_000;
 
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const getMessageId = (message) => message.parentElement.getAttribute('id');
+  const focusMessage = async (message) => {
+    message.scrollIntoView(true);
+    message.focus();
+    message.click();
+    await wait(100);
+  };
 
   const waitUntilElementIsVisible = (selector) =>
     new Promise((resolve) => {
@@ -35,16 +42,17 @@
   }
 
   async function goFocusAndUp(message) {
-    const eventUp = new KeyboardEvent("keydown", {
-      key: "ArrowUp",
-      code: "ArrowUp",
+    console.log('going up', message);
+    const eventUp = new KeyboardEvent('keydown', {
+      key: 'ArrowUp',
+      code: 'ArrowUp',
       keyCode: 38,
       bubbles: true,
     });
 
-    message.focus();
+    await focusMessage(message);
     message.dispatchEvent(eventUp);
-    await wait(100);
+    await wait(2000);
   }
 
   async function removeAllIfPossible(messages) {
@@ -55,10 +63,7 @@
 
   async function removeMessageIfPossible(message) {
     try {
-      message.click();
-      message.scrollIntoView();
-      message.focus();
-      await wait(100);
+      await focusMessage(message);
 
       triggerHover(message);
       await waitUntilElementIsVisible(MENU_MORE_ACTIONS_SELECTOR);
@@ -67,25 +72,31 @@
       await waitUntilElementIsVisible(POPUP_MORE_ACTIONS_SELECTOR);
 
       if (!document.querySelector(MENU_DELETE_BUTTON_SELECTOR)) {
+        hideMoreActionsMenu();
         return;
       }
+
       clickDeleteMenuButton();
       await waitUntilElementIsVisible(MODAL_REMOVE_CONFIRMATION_SELECTOR);
 
-      await wait(500);
+      await wait(300);
       clickRemoveConfirmationButton();
     } catch (error) {
-      console.error("Error removing message:", error);
+      console.error('Error removing message:', error);
     }
   }
 
   function triggerHover(message) {
-    const event = new MouseEvent("mouseover", {
+    const event = new MouseEvent('mouseover', {
       bubbles: true,
       cancelable: true,
       view: window,
     });
-    message.querySelector(MESSAGE_HOVER_SELECTOR).dispatchEvent(event);
+
+    const hoverElement = message.querySelector(MESSAGE_HOVER_SELECTOR);
+    if (hoverElement) {
+      hoverElement.dispatchEvent(event);
+    }
   }
 
   function showMoreActionsMenu(message) {
@@ -103,39 +114,40 @@
   }
 
   function clickRemoveConfirmationButton() {
-    const removeConfirmationButton = document.querySelector(
-      MODAL_REMOVE_CONFIRMATION_SELECTOR
-    );
+    const removeConfirmationButton = document.querySelector(MODAL_REMOVE_CONFIRMATION_SELECTOR);
     if (removeConfirmationButton) {
       removeConfirmationButton.click();
+    }
+    hideMoreActionsMenu();
+  }
+
+  function hideMoreActionsMenu() {
+    const backdrop = document.querySelector(MODAL_BACKDROP_SELECTOR);
+    if (backdrop) {
+      backdrop.click();
     }
   }
 
   window.removeAllMessages = async () => {
+    // message id's
     const visited = new Set();
-    let scrolled = false;
+    let scrollRetries = 0;
     let page = 0;
 
     do {
       const pageMessages = getAllCurrentMessages();
-      const firstTryRemoveMessages = Array.from(pageMessages).filter(
-        (message) => !visited.has(message)
-      );
+      const firstTryRemoveMessages = Array.from(pageMessages).filter((message) => !visited.has(getMessageId(message)));
 
       await removeAllIfPossible(firstTryRemoveMessages);
-      firstTryRemoveMessages.forEach((message) => visited.add(message));
+      firstTryRemoveMessages.forEach((message) => visited.add(getMessageId(message)));
 
-      if (
-        firstTryRemoveMessages.length === 0 &&
-        pageMessages.length &&
-        !scrolled
-      ) {
+      if (firstTryRemoveMessages.length === 0 && pageMessages.length && !scrollRetries) {
         await goFocusAndUp(pageMessages[0]);
-        scrolled = true;
-      } else if (firstTryRemoveMessages.length === 0 && scrolled) {
+        scrollRetries++;
+      } else if (firstTryRemoveMessages.length === 0 && scrollRetries === 10) {
         return;
       } else {
-        scrolled = false;
+        scrollRetries = 0;
       }
 
       page++;
