@@ -1,0 +1,54 @@
+activeTab Permission Justification:
+
+The activeTab permission is required to interact with the current Slack tab when the user initiates message deletion. This permission:
+
+• Allows access to the current tab only when the extension icon is clicked
+• Enables finding and interacting with message elements
+• Permits execution of the deletion script on the active Slack page
+• Ensures privacy by limiting access to only when needed
+
+The extension uses this minimal permission approach because:
+• It's temporary and only active when the user clicks the extension
+• It's more privacy-focused than requesting permanent access
+• It only works on the currently active tab
+• Access is automatically revoked when the tab changes
+
+---
+
+scripting Permission Justification:
+
+The scripting permission is needed to execute the message deletion functionality on Slack's web interface. This permission:
+
+• Enables injection of the deletion script into Slack pages
+• Allows simulation of necessary user interactions (clicks, confirmations)
+• Ensures reliable operation across different Slack workspaces
+• Maintains proper execution context for message deletion
+
+Security measures:
+• Scripts only run on Slack domains
+• Code executes only after user confirmation
+• No data collection or external communication
+• Operations limited to message deletion tasks
+
+---
+
+Host Permission Justification (https://*.slack.com/*):
+
+This extension requires access to Slack's web domains to function properly. The host permission is essential because:
+
+1. Message Deletion: The extension needs to interact with Slack's web interface to:
+   • Locate user messages in conversations
+   • Access message deletion controls
+   • Confirm deletion actions
+   • Navigate through conversation history
+
+2. Workspace Compatibility: The wildcard permission (*.slack.com) is required because:
+   • Slack workspaces use different subdomains
+   • Users access Slack through various workspace URLs
+   • Each workspace maintains its own URL structure
+
+The permission is used securely:
+• Only activates on Slack domains
+• Runs only when user initiates deletion
+• No data collection or external transmission
+• Limited to message deletion functionality 

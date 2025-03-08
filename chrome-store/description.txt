@@ -1,0 +1,42 @@
+Slack PM Nuke
+
+Short Description:
+A simple tool to remove your messages from any Slack conversation or channel. Just open the conversation and let the extension do the work.
+
+Detailed Description:
+Slack PM Nuke is an unofficial extension that helps you clean up your message history in Slack conversations and channels. With a single click, you can remove all your messages from any Slack conversation.
+
+Key Features:
+• Simple one-click operation
+• Works in both direct messages and channels
+• Automatically scrolls through conversation history
+• Respects Slack's message deletion permissions
+• Built-in rate limiting to prevent API issues
+
+How to Use:
+1. Open Slack in your browser
+2. Navigate to the conversation or channel where you want to remove your messages
+3. Click the extension icon
+4. Confirm the deletion process
+5. Keep the tab open until the process completes
+
+Important Notes:
+• The extension will attempt to delete ALL messages that you have permission to remove
+• The process continues until it reaches the beginning of the conversation
+• Built-in delays ensure smooth operation with Slack's API
+• If the process stops before completion, simply run it again
+• The extension works with Slack's web interface and may need updates when Slack changes
+
+⚠️ Disclaimer:
+This is an unofficial tool and is not affiliated with or endorsed by Slack. The extension may stop working if Slack updates their web interface. Instead of leaving a negative review if something breaks, please contact the developer for support.
+
+Privacy & Permissions:
+• Only works on Slack's website
+• No data collection
+• No external API calls
+• Requires minimal permissions
+
+Support:
+If you encounter any issues or have suggestions, please contact the developer through the support link instead of leaving a negative review. We're committed to maintaining and improving the extension as Slack evolves.
+
+Note: This extension is provided as-is and may require updates to maintain compatibility with Slack's interface changes. 

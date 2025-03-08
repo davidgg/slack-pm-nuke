@@ -1,0 +1,22 @@
+Host Permission Justification (https://*.slack.com/*):
+
+This extension requires access to Slack's web domains to function properly. The host permission is essential because:
+
+1. Message Deletion: The extension needs to interact with Slack's web interface to:
+   • Locate user messages in conversations
+   • Access message deletion controls
+   • Confirm deletion actions
+   • Navigate through conversation history
+
+2. Workspace Compatibility: The wildcard permission (*.slack.com) is required because:
+   • Slack workspaces use different subdomains
+   • Users access Slack through various workspace URLs
+   • Each workspace maintains its own URL structure
+
+The permission is used securely:
+• Only activates on Slack domains
+• Runs only when user initiates deletion
+• No data collection or external transmission
+• Limited to message deletion functionality
+
+This is the minimum permission needed to provide the core message deletion feature across all Slack workspaces. 
