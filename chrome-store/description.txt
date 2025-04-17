@@ -6,12 +6,21 @@ A simple tool to remove your messages from any Slack conversation or channel. Ju
 Detailed Description:
 Slack PM Nuke is an unofficial extension that helps you clean up your message history in Slack conversations and channels. With a single click, you can remove all your messages from any Slack conversation.
 
+How It Works:
+The extension simulates human interaction to safely remove messages:
+• Starts with the most recent messages
+• Processes each visible message one by one
+• Once current messages are handled, it automatically loads older messages
+• Continues this process from newest to oldest messages
+• Uses natural delays and interactions to ensure reliable operation
+
 Key Features:
 • Simple one-click operation
 • Works in both direct messages and channels
 • Automatically scrolls through conversation history
 • Respects Slack's message deletion permissions
 • Built-in rate limiting to prevent API issues
+• Natural interaction patterns to ensure reliability
 
 How to Use:
 1. Open Slack in your browser
@@ -24,6 +33,9 @@ Important Notes:
 • The extension will attempt to delete ALL messages that you have permission to remove
 • The process continues until it reaches the beginning of the conversation
 • Built-in delays ensure smooth operation with Slack's API
+• Due to the nature of the extension, you might need to run it multiple times
+• You can navigate to any recent message to start the deletion process from there
+• Please note that thread messages are not deleted
 • If the process stops before completion, simply run it again
 • The extension works with Slack's web interface and may need updates when Slack changes
 

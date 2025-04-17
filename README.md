@@ -1,6 +1,22 @@
 # Slack PM Nuke
 
+<div align="center">
+  <img src="src/icons/store-icon.svg" alt="Slack PM Nuke" width="128" height="128">
+</div>
+
+<div align="center">
+  <a href="https://chromewebstore.google.com/detail/slack-pm-nuke/abfinnhkhaoabnflickhgaodmnkloaog">
+    <img alt="Available in the Chrome Web Store" src="chrome-store/chrome-store-badge-mid.png" width="170">
+  </a>
+</div>
+
 A Chrome extension that allows you to quickly and securely delete all your private messages from any Slack conversation with a single click.
+
+## Screenshot
+
+<div align="center">
+  <img src="chrome-store/screenshot.png" alt="Slack PM Nuke Screenshot" width="1280">
+</div>
 
 ## Features
 
@@ -10,9 +26,9 @@ A Chrome extension that allows you to quickly and securely delete all your priva
 
 ## Installation
 
-### From Chrome Web Store (Coming Soon)
+### From Chrome Web Store (Recommended)
 
-1. Visit the Chrome Web Store page for Slack PM Nuke
+1. Visit the Chrome [Web Store page for Slack PM Nuke](https://chromewebstore.google.com/detail/slack-pm-nuke/abfinnhkhaoabnflickhgaodmnkloaog)
 2. Click "Add to Chrome"
 3. Confirm the installation
 
@@ -41,45 +57,38 @@ A Chrome extension that allows you to quickly and securely delete all your priva
 
 ## Development
 
-### Icon Generation
+### Prerequisites
 
-The extension uses SVG source files for icons, which are converted to PNG files for use in the Chrome extension.
+#### Installing librsvg
 
-To generate PNG icons from the SVG source files:
+The `rsvg-convert` command is required for icon generation. Install it using:
 
-1. Install dependencies:
+```bash
+# MacOS
+brew install librsvg
+```
 
-   ```
+### Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
    npm install
    ```
 
-2. Create or modify SVG icons in the `src/icons/` directory:
+### Build Scripts
 
-   - `icon.svg`: Main icon used for all extension sizes (16x16, 48x48, 128x128)
-   - `store-icon.svg`: Icon used for the Chrome Web Store listing (128x128)
+The project includes two main build scripts:
 
-3. Run the icon generation script:
+1. Generate PNG icons from SVG:
 
-   ```
+   ```bash
    npm run build-icons
    ```
 
-   This will convert the SVG files to PNG files in the appropriate sizes and place them in the following locations:
+   This converts the SVG icons to PNG in different sizes (16x16, 48x48, 128x128)
 
-   - Extension icons: `dist/images/icon16.png`, `dist/images/icon48.png`, `dist/images/icon128.png`
-   - Chrome Store icon: `chrome-store/store-icon.png`
-
-4. Alternatively, you can run the full build process which includes icon generation:
-
-   ```
-   npm run build
-   ```
-
-5. To preview the generated icons, open `scripts/preview-icons.html` in your browser.
-
-### Dependencies
-
-- The icon generation script requires the `sharp` library for image processing, which is installed as a dev dependency.
+The build scripts are located in the `scripts` directory and include error handling and dependency checks.
 
 ## Privacy & Security
 
@@ -114,3 +123,7 @@ This extension is not affiliated with, endorsed by, or connected to Slack Techno
 ## Support
 
 For issues, feature requests, or questions, please open an issue on the GitHub repository.
+
+## Author
+
+Created by [davidgg.es](https://davidgg.es)

@@ -42,7 +42,6 @@
   }
 
   async function goFocusAndUp(message) {
-    console.log('going up', message);
     const eventUp = new KeyboardEvent('keydown', {
       key: 'ArrowUp',
       code: 'ArrowUp',
@@ -63,6 +62,7 @@
 
   async function removeMessageIfPossible(message) {
     try {
+      message.click();
       await focusMessage(message);
 
       triggerHover(message);
@@ -136,21 +136,23 @@
 
     do {
       const pageMessages = getAllCurrentMessages();
-      const firstTryRemoveMessages = Array.from(pageMessages).filter((message) => !visited.has(getMessageId(message)));
+      const firstTryRemoveMessages = Array.from(pageMessages)
+        .filter((message) => !visited.has(getMessageId(message)))
+        .reverse();
 
-      await removeAllIfPossible(firstTryRemoveMessages);
-      firstTryRemoveMessages.forEach((message) => visited.add(getMessageId(message)));
-
-      if (firstTryRemoveMessages.length === 0 && pageMessages.length && !scrollRetries) {
+      if (firstTryRemoveMessages.length) {
+        await removeAllIfPossible(firstTryRemoveMessages);
+        firstTryRemoveMessages.forEach((message) => visited.add(getMessageId(message)));
+      } else if (pageMessages.length && !scrollRetries) {
         await goFocusAndUp(pageMessages[0]);
         scrollRetries++;
-      } else if (firstTryRemoveMessages.length === 0 && scrollRetries === 10) {
+      } else if (scrollRetries === 10) {
         return;
       } else {
         scrollRetries = 0;
       }
 
       page++;
-    } while (true && page < HARD_LIMIT_PAGE_PROCESS);
+    } while (page < HARD_LIMIT_PAGE_PROCESS);
   };
 })();
